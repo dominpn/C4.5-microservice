@@ -1,0 +1,30 @@
+
+C4.5 [release 8] decision tree generator	Sat Jan 18 19:59:06 2020
+----------------------------------------
+
+    Options:
+	File stem <golf>
+
+Read 14 cases (4 attributes) from golf.data
+
+Decision Tree:
+
+outlook = overcast: Play (4.0)
+outlook = sunny:
+|   humidity <= 75 : Play (2.0)
+|   humidity > 75 : Don't Play (3.0)
+outlook = rain:
+|   windy = true: Don't Play (2.0)
+|   windy = false: Play (3.0)
+
+
+Tree saved
+
+
+Evaluation on training data (14 items):
+
+	 Before Pruning           After Pruning
+	----------------   ---------------------------
+	Size      Errors   Size      Errors   Estimate
+
+	   8    0( 0.0%)      8    0( 0.0%)    (38.5%)   <<

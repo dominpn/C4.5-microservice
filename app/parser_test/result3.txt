@@ -1,0 +1,43 @@
+
+C4.5 [release 8] decision tree generator        Thu Jan 23 08:03:57 2020
+----------------------------------------
+
+    Options:
+        File stem <hypo>
+
+Read 2514 cases (29 attributes) from hypo.data
+
+Decision Tree:
+
+TSH <= 6 : negative (2246.8/1.0)
+TSH > 6 :
+|   FTI <= 64 :
+|   |   TSH measured = f: negative (4.3)
+|   |   TSH measured = t:
+|   |   |   T4U measured = f: compensated hypothyroid (4.5/2.1)
+|   |   |   T4U measured = t:
+|   |   |   |   thyroid surgery = f: primary hypothyroid (59.0/1.0)
+|   |   |   |   thyroid surgery = t: negative (3.0/1.0)
+|   FTI > 64 :
+|   |   on thyroxine = t: negative (35.2)
+|   |   on thyroxine = f:
+|   |   |   TSH measured = f: negative (21.2)
+|   |   |   TSH measured = t:
+|   |   |   |   thyroid surgery = t: negative (3.7)
+|   |   |   |   thyroid surgery = f:
+|   |   |   |   |   TT4 > 150 : negative (6.1/0.1)
+|   |   |   |   |   TT4 <= 150 :
+|   |   |   |   |   |   TT4 measured = f: primary hypothyroid (2.8/0.7)
+|   |   |   |   |   |   TT4 measured = t: compensated hypothyroid (127.4/1.5)
+
+
+Tree saved
+
+
+Evaluation on training data (2514 items):
+
+         Before Pruning           After Pruning
+        ----------------   ---------------------------
+        Size      Errors   Size      Errors   Estimate
+
+          21    6( 0.2%)     21    6( 0.2%)    ( 0.9%)   <<
