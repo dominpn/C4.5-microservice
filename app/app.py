@@ -9,7 +9,7 @@ from dash.dependencies import Input, Output, State
 
 import dash_interactive_graphviz
 
-from app import parser_tree as parser
+import parser
 
 UPLOAD_DIRECTORY = "app_uploaded_files"
 C4_5_COMMAND = "bin/c45 -f"
