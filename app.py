@@ -163,6 +163,12 @@ def update_output_date(content, name, date):
 @app.callback(Output('tree', 'dot_source'), [Input('create_tree_button', 'n_clicks')])
 def update_tree(number_of_times_button_has_clicked):
     cmd = C4_5_COMMAND + " " + UPLOAD_DIRECTORY+"/file"  # + " > " + RESULT_FILE_NAME
+
+    os.popen("chmod +x bin/average")
+    os.popen("chmod +x bin/c45")
+    os.popen("chmod +x bin/c4.5rules")
+    os.popen("chmod +x bin/consult")
+    os.popen("chmod +x bin/consultr")
     lines = os.popen(cmd).readlines()
     print(lines)
 
@@ -179,11 +185,4 @@ def update_tree(number_of_times_button_has_clicked):
 
 
 if __name__ == '__main__':
-    os.popen("chmod +x bin/average")
-    os.popen("chmod +x bin/c45")
-    os.popen("chmod +x bin/c4.5rules")
-    os.popen("chmod +x bin/consult")
-    os.popen("chmod +x bin/consultr")
-    app.run_server(
-        debug=True
-    )
+    app.run_server(debug=True)
