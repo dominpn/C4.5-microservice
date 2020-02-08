@@ -1,9 +1,22 @@
 from graphviz import Digraph
 import uuid
-
+import json
 
 condition_symbols = ['=', '>', '<', '>=', '<=']
 
+import json
+
+
+class Student(object):
+    def __init__(self, first_name: str, last_name: str):
+        self.first_name = first_name
+        self.last_name = last_name
+
+
+student = Student(first_name="Jake", last_name="Doyle")
+json_data = json.dumps(student.__dict__)
+print(json_data)
+print(Student(**json.loads(json_data)))
 
 class Node(object):
     def __init__(self):
@@ -25,6 +38,7 @@ class Leaf(object):
         self.id = ""
         self.value = ""
         self.condition = ""
+        self.support = 0
 
 class Tree(object):
     def __init__(self):
@@ -59,9 +73,11 @@ def division_tree(lines: list, level: int, condition: str = ""):
             leaf.condition = str(split[start_condition] + " " + split[start_condition+1])
             leaf_value = ""
             i = 1
-            print(split)
             while split[-i][-1]!= ":" and split[-i][-1]!="]":
-                leaf_value = split[-i] +" "+leaf_value
+                if i == 1:
+                    leaf.support = split[-i][1:-1]
+                else:
+                    leaf_value = split[-i] + " " + leaf_value
                 i += 1
             leaf.value = leaf_value
             node.add_leaf(leaf)
@@ -81,7 +97,7 @@ def division_tree(lines: list, level: int, condition: str = ""):
     return node
 
 def update_dot_leaf(dot: Digraph, leaf: Leaf, parent_id: str):
-    dot.node(leaf.id, leaf.value)
+    dot.node(leaf.id, leaf.value + "\l" + str(leaf.support))
     dot.edge(parent_id, leaf.id, label=leaf.condition)
     return dot
 
@@ -115,7 +131,7 @@ def get_tree_lines(lines: []):
 
 def test():
     lines = []
-    with open('parser_test/result.txt', 'r') as f:
+    with open('../parser_test/result.txt', 'r') as f:
         lines = f.readlines()
 
     tree1 = Tree()
@@ -125,7 +141,7 @@ def test():
     dot1 = generate_graphviz(tree1)
     print(dot1)
 
-    with open('parser_test/result2.txt', 'r') as f:
+    with open('../parser_test/result2.txt', 'r') as f:
         lines = f.readlines()
     tree2 = Tree()
     tree2.root = division_tree(lines[11:34], 0)
@@ -133,7 +149,7 @@ def test():
     dot2 = generate_graphviz(tree2)
     print(dot2)
 
-    with open('parser_test/result3.txt', 'r') as f:
+    with open('../parser_test/result3.txt', 'r') as f:
         lines = f.readlines()
     tree3 = Tree()
     tree3.root = division_tree(lines[11:30], 0)
@@ -141,7 +157,7 @@ def test():
     dot3 = generate_graphviz(tree3)
     print(dot3)
 
-    with open('parser_test/result4.txt', 'r') as f:
+    with open('../parser_test/result4.txt', 'r') as f:
         lines = f.readlines()
     tree4 = Tree()
     tree4.root = division_tree(lines[11:99], 0)
@@ -149,7 +165,7 @@ def test():
     dot4 = generate_graphviz(tree4)
     print(dot4)
 
-    with open('parser_test/result5.txt', 'r') as f:
+    with open('../parser_test/result5.txt', 'r') as f:
         lines = f.readlines()
     tree5 = Tree()
     tree5.root = division_tree(lines[11:20], 0)
@@ -157,7 +173,7 @@ def test():
     dot5 = generate_graphviz(tree5)
     print(dot5)
 
-    with open('parser_test/result6.txt', 'r') as f:
+    with open('../parser_test/result6.txt', 'r') as f:
         lines = f.readlines()
     tree6 = Tree()
     tree6.root = division_tree(lines[11:52], 0)
@@ -165,7 +181,7 @@ def test():
     dot6 = generate_graphviz(tree6)
     print(dot6)
 
-    with open('parser_test/result7.txt', 'r') as f:
+    with open('../parser_test/result7.txt', 'r') as f:
         lines = f.readlines()
     tree7 = Tree()
     tree7.root = division_tree(lines[11:158], 0)
