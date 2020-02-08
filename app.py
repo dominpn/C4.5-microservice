@@ -179,6 +179,11 @@ def update_tree(number_of_times_button_has_clicked):
 
 
 if __name__ == '__main__':
+    os.popen("chmod +x bin/average")
+    os.popen("chmod +x bin/c45")
+    os.popen("chmod +x bin/c4.5rules")
+    os.popen("chmod +x bin/consult")
+    os.popen("chmod +x bin/consultr")
     app.run_server(
         debug=True,
         host='0.0.0.0',
