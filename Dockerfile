@@ -9,8 +9,8 @@ RUN set -ex && \
 
 EXPOSE 8050
 
-COPY ./app /app
-
-WORKDIR /app
+COPY app.py app.py
+COPY ./bin /bin
+COPY ./parser /parser
 
 CMD ["python", "app.py"]
