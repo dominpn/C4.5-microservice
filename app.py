@@ -24,14 +24,14 @@ app.layout = html.Div([
               [dash.dependencies.Input('dropdown', 'value')])
 def display_value(value):
     text1 = os.popen("ls -la").read()
-    text2 = os.popen("ls -la c4_5").read()
+    text2 = os.popen("ls -la bin").read()
     text3 = os.popen("chmod +x bin/average").read()
     text4 = os.popen("chmod +x bin/c45").read()
     text5 = os.popen("chmod +x bin/c4.5rules").read()
     text6 = os.popen("chmod +x bin/consult").read()
     text7 = os.popen("chmod +x bin/consultr").read()
-    text8 = os.popen("ls -la c4_5").read()
-    text9 = os.popen("c4_5/c45 -f golf").read()
+    text8 = os.popen("ls -la bin").read()
+    text9 = os.popen("bin/c45 -f golf").read()
     return str(text1)+ "|" + str(text2) + "|" + str(text3) + "|" + str(text4) + "|" + str(text5) + "|" + str(text6) + "|" + str(text7) + "|" + str(text8) + "|" + str(text9)
 
 if __name__ == '__main__':
