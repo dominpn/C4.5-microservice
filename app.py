@@ -19,21 +19,21 @@ if not os.path.exists(UPLOAD_DIRECTORY):
 
 dot_source = """
 digraph {
-	"94b657ba-4288-11ea-b0bf-54ee75581e6b" [label=outlook]
-	"94b80562-4288-11ea-886a-54ee75581e6b" [label="Play (4.0) "]
-	"94b657ba-4288-11ea-b0bf-54ee75581e6b" -> "94b80562-4288-11ea-886a-54ee75581e6b" [label="= overcast:"]
-	"94b82c74-4288-11ea-a58d-54ee75581e6b" [label=humidity]
-	"94b657ba-4288-11ea-b0bf-54ee75581e6b" -> "94b82c74-4288-11ea-a58d-54ee75581e6b" [label="= sunny:"]
-	"94b82c75-4288-11ea-afd3-54ee75581e6b" [label="Play (2.0) "]
-	"94b82c74-4288-11ea-a58d-54ee75581e6b" -> "94b82c75-4288-11ea-afd3-54ee75581e6b" [label="<= 75"]
-	"94b82c76-4288-11ea-a3a7-54ee75581e6b" [label="Don't Play (3.0) "]
-	"94b82c74-4288-11ea-a58d-54ee75581e6b" -> "94b82c76-4288-11ea-a3a7-54ee75581e6b" [label="> 75"]
-	"94b82c77-4288-11ea-827f-54ee75581e6b" [label=windy]
-	"94b657ba-4288-11ea-b0bf-54ee75581e6b" -> "94b82c77-4288-11ea-827f-54ee75581e6b" [label="= rain:"]
-	"94b82c78-4288-11ea-8758-54ee75581e6b" [label="Don't Play (2.0) "]
-	"94b82c77-4288-11ea-827f-54ee75581e6b" -> "94b82c78-4288-11ea-8758-54ee75581e6b" [label="= true:"]
-	"94b82c79-4288-11ea-bb95-54ee75581e6b" [label="Play (3.0) "]
-	"94b82c77-4288-11ea-827f-54ee75581e6b" -> "94b82c79-4288-11ea-bb95-54ee75581e6b" [label="= false:"]
+	"56ce2ff4-4a99-11ea-ae0a-54ee75581e6b" [label=outlook]
+	"56d38626-4a99-11ea-8402-54ee75581e6b" [label="Play \l4.0"]
+	"56ce2ff4-4a99-11ea-ae0a-54ee75581e6b" -> "56d38626-4a99-11ea-8402-54ee75581e6b" [label="= overcast:"]
+	"56d38627-4a99-11ea-b6f8-54ee75581e6b" [label=humidity]
+	"56ce2ff4-4a99-11ea-ae0a-54ee75581e6b" -> "56d38627-4a99-11ea-b6f8-54ee75581e6b" [label="= sunny:"]
+	"56d38628-4a99-11ea-a707-54ee75581e6b" [label="Play \l2.0"]
+	"56d38627-4a99-11ea-b6f8-54ee75581e6b" -> "56d38628-4a99-11ea-a707-54ee75581e6b" [label="<= 75"]
+	"56d38629-4a99-11ea-bc8e-54ee75581e6b" [label="Don't Play \l3.0"]
+	"56d38627-4a99-11ea-b6f8-54ee75581e6b" -> "56d38629-4a99-11ea-bc8e-54ee75581e6b" [label="> 75"]
+	"56d3862a-4a99-11ea-a237-54ee75581e6b" [label=windy]
+	"56ce2ff4-4a99-11ea-ae0a-54ee75581e6b" -> "56d3862a-4a99-11ea-a237-54ee75581e6b" [label="= rain:"]
+	"56d3862b-4a99-11ea-ab4e-54ee75581e6b" [label="Don't Play \l2.0"]
+	"56d3862a-4a99-11ea-a237-54ee75581e6b" -> "56d3862b-4a99-11ea-ab4e-54ee75581e6b" [label="= true:"]
+	"56d3862c-4a99-11ea-98a2-54ee75581e6b" [label="Play \l3.0"]
+	"56d3862a-4a99-11ea-a237-54ee75581e6b" -> "56d3862c-4a99-11ea-98a2-54ee75581e6b" [label="= false:"]
 }
 """
 
@@ -47,7 +47,7 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 navbar = dbc.NavbarSimple(
     children=[
-        dbc.NavItem(dbc.NavLink("Link", href="#")),
+        dbc.NavItem(dbc.NavLink("Kod źródłowy", href="https://github.com/dominpn/C4.5-microservice")),
     ],
     brand="Projekt C4.5",
     brand_href="#",
