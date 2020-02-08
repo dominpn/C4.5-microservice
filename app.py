@@ -185,7 +185,5 @@ if __name__ == '__main__':
     os.popen("chmod +x bin/consult")
     os.popen("chmod +x bin/consultr")
     app.run_server(
-        debug=True,
-        host='0.0.0.0',
-        port=8050
+        debug=True
     )
