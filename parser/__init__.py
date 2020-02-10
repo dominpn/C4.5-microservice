@@ -70,7 +70,11 @@ def division_tree(lines: list, level: int, condition: str = ""):
             sets.append(lines[index])
             leaf = Leaf()
             leaf.id = str(uuid.uuid1())
-            leaf.condition = str(split[start_condition] + " " + split[start_condition+1])
+            if split[start_condition + 1].isnumeric():
+                leaf.condition = str(split[start_condition] + " " + split[start_condition + 1])
+            else:
+                leaf.condition = split[start_condition + 1][:-1]
+
             leaf_value = ""
             i = 1
             while split[-i][-1]!= ":" and split[-i][-1]!="]":
@@ -84,7 +88,10 @@ def division_tree(lines: list, level: int, condition: str = ""):
             index += 1
         else :
             set.append(lines[index])
-            new_condition = str(split[start_condition] + " " + split[start_condition+1])
+            if split[start_condition + 1].isnumeric():
+                new_condition = str(split[start_condition] + " " + split[start_condition + 1])
+            else:
+                new_condition = split[start_condition + 1][:-1]
             index += 1
             while index < lenght and lines[index].split()[level] == '|':
                 set.append(lines[index])
