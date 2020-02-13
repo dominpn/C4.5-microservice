@@ -112,13 +112,13 @@ body = dbc.Container(
                     [
                         dbc.Button("Generuj drzewo", id="create_tree_button", color="secondary"),
                         dbc.Button(
-                            "Wynik .DOT", id="positioned-toast-toggle-dot", color="primary"
+                            "Wynik .DOT", id="positioned-toast-toggle-dot", color="success"
                         ),
                         dbc.Button(
-                            "Wynik .JSON", id="positioned-toast-toggle-json", color="primary"
+                            "Wynik .JSON", id="positioned-toast-toggle-json", color="warning"
                         ),
                         dbc.Button(
-                            "Wynik .XML", id="positioned-toast-toggle-xml", color="primary"
+                            "Wynik .XML", id="positioned-toast-toggle-xml", color="danger"
                         ),
                         dash_interactive_graphviz.DashInteractiveGraphviz(
                             id="tree",
@@ -136,7 +136,7 @@ body = dbc.Container(
                     header="DOT",
                     is_open=False,
                     dismissable=True,
-                    icon="danger",
+                    icon="success",
                     style={"position": "fixed", "top": 66, "right": 10, "width": 350},
                 ),
                 dbc.Toast(
@@ -145,7 +145,7 @@ body = dbc.Container(
                     header="JSON",
                     is_open=False,
                     dismissable=True,
-                    icon="danger",
+                    icon="warning",
                     style={"position": "fixed", "top": 66, "right": 10, "width": 350},
                 ),
                 dbc.Toast(
@@ -203,23 +203,14 @@ def update_output_date(content, name, date):
         ]
         return children
 
-json_source = """{
-{
-    "root": {
-    }
-}
-"""
-xml_source = """
-<?xml version="1.0" ?>
-<all>
-	<root type="dict">
-	</root>
-</all>
-"""
-
 select_tab = 0
 
-@app.callback(Output('tree', 'dot_source'), [Input('create_tree_button', 'n_clicks')])
+@app.callback([Output('tree', 'dot_source'),
+                Output("positioned-toast-dot", "children"),
+                Output("positioned-toast-json", "children"),
+                Output("positioned-toast-xml", "children"),
+               ],
+              [Input('create_tree_button', 'n_clicks')])
 def update_tree(number_of_times_button_has_clicked):
     cmd = C4_5_COMMAND + " " + UPLOAD_DIRECTORY+"/file"  # + " > " + RESULT_FILE_NAME
 
@@ -230,6 +221,21 @@ def update_tree(number_of_times_button_has_clicked):
     os.popen("chmod +x bin/consultr")
     lines = os.popen(cmd).readlines()
     print(lines)
+
+    json_source = """{
+    {
+        "root": {
+        }
+    }
+    """
+
+    xml_source = """
+    <?xml version="1.0" ?>
+    <all>
+    	<root type="dict">
+    	</root>
+    </all>
+    """
 
     try:
         tree = parser.Tree()
@@ -243,44 +249,41 @@ def update_tree(number_of_times_button_has_clicked):
         )
         xml_source = json2xml.Json2xml(data).to_xml()
 
-        return dot_source
+        return [dot_source, dot_source, json_source, xml_source]
     except:
-        return dot_source_error
+        return [dot_source_error, dot_source_error, json_source, xml_source]
 
-    return dot_source
+    return [dot_source, dot_source, json_source, xml_source]
 
 
 @app.callback(
-    [Output("positioned-toast-dot", "is_open"),
-     Output("positioned-toast-dot", "children")],
+    Output("positioned-toast-dot", "is_open"),
     [Input("positioned-toast-toggle-dot", "n_clicks")],
 )
 def open_toast(n):
     if n:
-        return [True, dot_source]
-    return [False, dot_source]
+        return True
+    return False
 
 
 @app.callback(
-    [Output("positioned-toast-json", "is_open"),
-     Output("positioned-toast-json", "children")],
+    Output("positioned-toast-json", "is_open"),
     [Input("positioned-toast-toggle-json", "n_clicks")],
 )
 def open_toast(n):
     if n:
-        return [True, json_source]
-    return [False, json_source]
+        return True
+    return False
 
 
 @app.callback(
-    [Output("positioned-toast-xml", "is_open"),
-     Output("positioned-toast-xml", "children")],
+    Output("positioned-toast-xml", "is_open"),
     [Input("positioned-toast-toggle-xml", "n_clicks")],
 )
 def open_toast(n):
     if n:
-        return [True, xml_source]
-    return [False, xml_source]
+        return True
+    return False
 
 
 
