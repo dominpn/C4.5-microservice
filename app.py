@@ -137,7 +137,7 @@ body = dbc.Container(
                     is_open=False,
                     dismissable=True,
                     icon="success",
-                    style={"position": "fixed", "top": 66, "right": 10, "width": 350},
+                    style={"position": "fixed", "top": 66, "right": 10, "width": 550},
                 ),
                 dbc.Toast(
                     "JSON",
@@ -146,7 +146,7 @@ body = dbc.Container(
                     is_open=False,
                     dismissable=True,
                     icon="warning",
-                    style={"position": "fixed", "top": 66, "right": 10, "width": 350},
+                    style={"position": "fixed", "top": 66, "right": 10, "width": 550},
                 ),
                 dbc.Toast(
                     "XML",
@@ -155,7 +155,7 @@ body = dbc.Container(
                     is_open=False,
                     dismissable=True,
                     icon="danger",
-                    style={"position": "fixed", "top": 66, "right": 10, "width": 350},
+                    style={"position": "fixed", "top": 66, "right": 10, "width": 550},
                 ),
             ]
         )
