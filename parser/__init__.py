@@ -1,30 +1,20 @@
 from graphviz import Digraph
 import uuid
 import json
+from json2xml import json2xml
+from json2xml.utils import readfromstring
 
 condition_symbols = ['=', '>', '<', '>=', '<=']
 
-import json
 
-
-class Student(object):
-    def __init__(self, first_name: str, last_name: str):
-        self.first_name = first_name
-        self.last_name = last_name
-
-
-student = Student(first_name="Jake", last_name="Doyle")
-json_data = json.dumps(student.__dict__)
-print(json_data)
-print(Student(**json.loads(json_data)))
-
-class Node(object):
-    def __init__(self):
-        self.id = ""
-        self.value = ""
-        self.condition = ""
-        self.nodes = []
-        self.leafs = []
+class Node(dict):
+    def __init__(self, id, value, condition, nodes=None, leafs=None):
+        self.__dict__ = self
+        self.id = id
+        self.value = value
+        self.condition = condition
+        self.nodes = list(nodes) if nodes is not None else []
+        self.leafs = list(leafs) if leafs is not None else []
 
     def add_node(self, node):
         self.nodes.append(node)
@@ -33,16 +23,19 @@ class Node(object):
         self.leafs.append(leaf)
 
 
-class Leaf(object):
-    def __init__(self):
-        self.id = ""
-        self.value = ""
-        self.condition = ""
-        self.support = 0
+class Leaf(dict):
+    def __init__(self, id, value, condition, support):
+        self.__dict__ = self
+        self.id = id
+        self.value = value
+        self.condition = condition
+        self.support = support
 
-class Tree(object):
-    def __init__(self):
-        self.root = None
+
+class Tree(dict):
+    def __init__(self, root=None):
+        self.__dict__ = self
+        self.root = root if root is not None else None
 
 
 def division_tree(lines: list, level: int, condition: str = ""):
@@ -50,16 +43,17 @@ def division_tree(lines: list, level: int, condition: str = ""):
     sets = []
     set = []
 
-    node = Node()
-    node.id = str(uuid.uuid1())
+    node_id = str(uuid.uuid1())
 
-    node.value = lines[0].split()[level]
+    node_value = lines[0].split()[level]
     index = level + 1
     while lines[0].split()[index] not in condition_symbols:
-        node.value = node.value + " " + lines[0].split()[index]
+        node_value = node_value + " " + lines[0].split()[index]
         index += 1
 
-    node.condition = str(condition)
+    node_condition = str(condition)
+
+    node = Node(node_id, node_value, node_condition)
 
     start_condition = index
     index = 0
@@ -68,22 +62,23 @@ def division_tree(lines: list, level: int, condition: str = ""):
 
         if split[-1][-1] != ':':
             sets.append(lines[index])
-            leaf = Leaf()
-            leaf.id = str(uuid.uuid1())
+            leaf_id = str(uuid.uuid1())
+            leaf_condition = ""
             if split[start_condition + 1].isnumeric():
-                leaf.condition = str(split[start_condition] + " " + split[start_condition + 1])
+                leaf_condition = str(split[start_condition] + " " + split[start_condition + 1])
             else:
-                leaf.condition = split[start_condition + 1][:-1]
+                leaf_condition = split[start_condition + 1][:-1]
 
             leaf_value = ""
             i = 1
             while split[-i][-1]!= ":" and split[-i][-1]!="]":
                 if i == 1:
-                    leaf.support = split[-i][1:-1]
+                    leaf_support = split[-i][1:-1]
                 else:
                     leaf_value = split[-i] + " " + leaf_value
                 i += 1
-            leaf.value = leaf_value
+            leaf_value = leaf_value
+            leaf = Leaf(leaf_id, leaf_value, leaf_condition, leaf_support)
             node.add_leaf(leaf)
             index += 1
         else :
@@ -137,6 +132,7 @@ def get_tree_lines(lines: []):
     return []
 
 def test():
+
     lines = []
     with open('../parser_test/result.txt', 'r') as f:
         lines = f.readlines()
@@ -147,6 +143,13 @@ def test():
     print(tree1)
     dot1 = generate_graphviz(tree1)
     print(dot1)
+
+    json_str = json.dumps(tree1, indent=2)
+    print(json_str)
+    data = readfromstring(
+        json_str
+    )
+    print(json2xml.Json2xml(data).to_xml())
 
     with open('../parser_test/result2.txt', 'r') as f:
         lines = f.readlines()
