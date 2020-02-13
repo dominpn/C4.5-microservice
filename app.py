@@ -111,9 +111,15 @@ body = dbc.Container(
                 dbc.Col(
                     [
                         dbc.Button("Generuj drzewo", id="create_tree_button", color="secondary"),
-                        html.A(' (WYNIK .DOT) ', id='link_dot'),
-                        html.A(' (WYNIK .JSON) ', id='link_json'),
-                        html.A(' (WYNIK .XML) ', id='link_xml'),
+                        dbc.Button(
+                            "Wynik .DOT", id="positioned-toast-toggle-dot", color="primary"
+                        ),
+                        dbc.Button(
+                            "Wynik .JSON", id="positioned-toast-toggle-json", color="primary"
+                        ),
+                        dbc.Button(
+                            "Wynik .XML", id="positioned-toast-toggle-xml", color="primary"
+                        ),
                         dash_interactive_graphviz.DashInteractiveGraphviz(
                             id="tree",
                             dot_source=dot_source,
@@ -122,7 +128,34 @@ body = dbc.Container(
                             }
                         ),
                     ],
-                    md=12
+                    md=12,
+                ),
+                dbc.Toast(
+                    "DOT",
+                    id="positioned-toast-dot",
+                    header="DOT",
+                    is_open=False,
+                    dismissable=True,
+                    icon="danger",
+                    style={"position": "fixed", "top": 66, "right": 10, "width": 350},
+                ),
+                dbc.Toast(
+                    "JSON",
+                    id="positioned-toast-json",
+                    header="JSON",
+                    is_open=False,
+                    dismissable=True,
+                    icon="danger",
+                    style={"position": "fixed", "top": 66, "right": 10, "width": 350},
+                ),
+                dbc.Toast(
+                    "XML",
+                    id="positioned-toast-xml",
+                    header="XML",
+                    is_open=False,
+                    dismissable=True,
+                    icon="danger",
+                    style={"position": "fixed", "top": 66, "right": 10, "width": 350},
                 ),
             ]
         )
@@ -170,19 +203,21 @@ def update_output_date(content, name, date):
         ]
         return children
 
-json_souce = """{
+json_source = """{
 {
     "root": {
     }
 }
 """
-xml_souce = """
+xml_source = """
 <?xml version="1.0" ?>
 <all>
 	<root type="dict">
 	</root>
 </all>
 """
+
+select_tab = 0
 
 @app.callback(Output('tree', 'dot_source'), [Input('create_tree_button', 'n_clicks')])
 def update_tree(number_of_times_button_has_clicked):
@@ -200,76 +235,53 @@ def update_tree(number_of_times_button_has_clicked):
         tree = parser.Tree()
         select_lines = parser.get_tree_lines(lines)
         tree.root = parser.division_tree(select_lines, 0)
+        dot_source = str(parser.generate_graphviz(tree))
 
-        json_souce = json.dumps(tree, indent=2)
+        json_source = json.dumps(tree, indent=2)
         data = readfromstring(
-            json_souce
+            json_source
         )
-        xml_souce = json2xml.Json2xml(data).to_xml()
+        xml_source = json2xml.Json2xml(data).to_xml()
 
-        return str(parser.generate_graphviz(tree))
+        return dot_source
     except:
         return dot_source_error
 
     return dot_source
 
 
-@app.callback(Output('link_dot', 'href'), [Input('tree', 'dot_source')])
-def update_link(value):
-    return '/dash/urlToDownloadDot?value={}'.format(value)
+@app.callback(
+    [Output("positioned-toast-dot", "is_open"),
+     Output("positioned-toast-dot", "children")],
+    [Input("positioned-toast-toggle-dot", "n_clicks")],
+)
+def open_toast(n):
+    if n:
+        return [True, dot_source]
+    return [False, dot_source]
 
 
-@app.server.route('/dash/urlToDownloadDot')
-def download_dot():
-    value = flask.request.args.get('value')
-    str_io = io.StringIO()
-    str_io.write(format(value))
-    mem = io.BytesIO()
-    mem.write(str_io.getvalue().encode('utf-8'))
-    mem.seek(0)
-    str_io.close()
-    return flask.send_file(mem,
-                           mimetype='text/dot',
-                           attachment_filename='tree.dot',
-                           as_attachment=True)
+@app.callback(
+    [Output("positioned-toast-json", "is_open"),
+     Output("positioned-toast-json", "children")],
+    [Input("positioned-toast-toggle-json", "n_clicks")],
+)
+def open_toast(n):
+    if n:
+        return [True, json_source]
+    return [False, json_source]
 
 
-@app.callback(Output('link_json', 'href'), [Input('tree', 'dot_source')])
-def update_link(value):
-    return '/dash/urlToDownloadJson?value={}'.format(value)
+@app.callback(
+    [Output("positioned-toast-xml", "is_open"),
+     Output("positioned-toast-xml", "children")],
+    [Input("positioned-toast-toggle-xml", "n_clicks")],
+)
+def open_toast(n):
+    if n:
+        return [True, xml_source]
+    return [False, xml_source]
 
-
-@app.server.route('/dash/urlToDownloadJson')
-def download_json():
-    str_io = io.StringIO()
-    str_io.write(json_souce)
-    mem = io.BytesIO()
-    mem.write(str_io.getvalue().encode('utf-8'))
-    mem.seek(0)
-    str_io.close()
-    return flask.send_file(mem,
-                           mimetype='text/json',
-                           attachment_filename='tree.json',
-                           as_attachment=True)
-
-
-@app.callback(Output('link_xml', 'href'), [Input('tree', 'dot_source')])
-def update_link(value):
-    return '/dash/urlToDownloadXml?value={}'.format(value)
-
-
-@app.server.route('/dash/urlToDownloadXml')
-def download_xml():
-    str_io = io.StringIO()
-    str_io.write(xml_souce)
-    mem = io.BytesIO()
-    mem.write(str_io.getvalue().encode('utf-8'))
-    mem.seek(0)
-    str_io.close()
-    return flask.send_file(mem,
-                           mimetype='text/xml',
-                           attachment_filename='tree.xml',
-                           as_attachment=True)
 
 
 if __name__ == '__main__':
